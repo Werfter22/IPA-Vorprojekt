@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
@@ -29,6 +29,7 @@ include '../Nav/nav.php';
     <table class="min-w-full bg-white border border-gray-200 rounded-lg">
         <thead class="bg-gray-100">
             <tr>
+                <th class="py-2 px-4 border-b text-left text-gray-700">Geräte Bild</th>
                 <th class="py-2 px-4 border-b text-left text-gray-700">Geräte Name</th>
                 <th class="py-2 px-4 border-b text-left text-gray-700">Seriennummer</th>
                 <th class="py-2 px-4 border-b text-left text-gray-700">Betriebssystem</th>
@@ -68,13 +69,12 @@ include '../Nav/nav.php';
             deviceList.innerHTML = '';  // Clear existing rows
 
             devices.forEach(device => {
-                // Prepare device names, serial numbers, OS, etc.
                 const deviceNames = [
                     device.device_name_1, device.device_name_2, device.device_name_3,
                     device.device_name_4, device.device_name_5, device.device_name_6,
                     device.device_name_7, device.device_name_8, device.device_name_9,
                     device.device_name_10, device.device_name_11, device.device_name_12
-                ].filter(Boolean); // Filter out undefined values
+                ].filter(Boolean);
 
                 const serialNumbers = [
                     device.serialnumber_1, device.serialnumber_2, device.serialnumber_3,
@@ -90,50 +90,162 @@ include '../Nav/nav.php';
                     device.os_10, device.os_11, device.os_12
                 ].filter(Boolean);
 
+                const deviceImages = {
+                    "Apple_iMac": "../../Backend/Images/Content/Devices/Apple_iMac.png",
+                    "Apple_iPad_11_pro": "../..//Backend/Images/Content/Devices/Apple_iPad_11_pro.png",
+                    "Apple_iPad_pro_2021": "../../Backend/Images/Content/Devices/Apple_iPad_pro_2021.png",
+                    "Apple_iPhone_7": "../../Backend/Images/Content/Devices/Apple_iPhone_7.png",
+                    "Apple_iPhone_12": "../../Backend/Images/Content/Devices/Apple_iPhone_12.png",
+                    "Apple_iPhone_13_pro": "../../Backend/Images/Content/Devices/Apple_iPhone_13_pro.png",
+                    "Apple_iPhone_14_pro": "../../Backend/Images/Content/Devices/Apple_iPhone_14_pro.png",
+                    "Apple_iPhone_15_pro": "../../Backend/Images/Content/Devices/Apple_iPhone_15_pro.png",
+                    "Apple_iPhone_pro_max": "../../Backend/Images/Content/Devices/Apple_iPhone_pro_max.png",
+                    "Apple_iPhone_SE": "../../Backend/Images/Content/Devices/Apple_iPhone_SE.png",
+                    "Apple_iPhone_XS": "../../Backend/Images/Content/Devices/Apple_iPhone_XS.png",
+                    "Apple_Mac_Mini": "../../Backend/Images/Content/Devices/Apple_Mac_Mini.png",
+                    "Apple_Mac_Studio": "../../Backend/Images/Content/Devices/Apple_Mac_Studio.png",
+                    "Apple_MacBook_Air": "../../Backend/Images/Content/Devices/Apple_MacBook_Air.png",
+                    "Apple_MacBook_Pro": "../../Backend/Images/Content/Devices/Apple_MacBook_Pro.png",
+                    "Lenovo_Fibocom": "../../Backend/Images/Content/Devices/Lenovo_Fibocom.png",
+                    "Tablet_Surface": "../../Backend/Images/Content/Devices/Tablet_Surface.png",
+                    "ThinkCentre_Lenovo": "../../Backend/Images/Content/Devices/ThinkCentre_Lenovo.png",
+                    "ThinkPad_Lenovo": "/Backend/Images/Content/Devices/ThinkPad_Lenovo.png",
+                    "default": "../../Backend/Images/Content/Devices/default.png"
+                };
+
                 // Create a row for each device name
                 deviceNames.forEach((name, index) => {
                     const qrData = `${name}, Serial: ${serialNumbers[index] || 'N/A'}`; // Define QR code data
                     const row = `
                         <tr class='hover:bg-gray-50'>
-                            <td class='py-2 px-4 border-b'>${name}</td>
-                            <td class='py-2 px-4 border-b'>${serialNumbers[index] || 'N/A'}</td>
-                            <td class='py-2 px-4 border-b'>${operatingSystems[index] || 'N/A'}</td>
+                            
+                            <td class="py-4 px-4 border-b text-left">
+                                <img src="${deviceImages[name] || '../../Backend/Images/Content/Devices/default.png'}" alt="Gerät" class="w-12 h-12 rounded-full object-cover">
+                            </td>
+                            <td class='py-2 px-4 border-b'>
+                                <span class="device-name">${name}</span>
+                                <input type="text" class="device-name-input hidden" value="${name}" />
+                                <span class="edit-icon cursor-pointer text-blue-500" onclick="editDevice(this)">✏️</span>
+                            </td>
+                            <td class='py-2 px-4 border-b'>
+                                <span class="serial-number">${serialNumbers[index] || 'N/A'}</span>
+                                <input type="text" class="serial-number-input hidden" value="${serialNumbers[index] || ''}" />
+                            </td>
+                            <td class='py-2 px-4 border-b'>
+                                <span class="operating-system">${operatingSystems[index] || 'N/A'}</span>
+                                <input type="text" class="operating-system-input hidden" value="${operatingSystems[index] || ''}" />
+                            </td>
                             <td class='py-2 px-4 border-b'>${device[`is_werft_device_${index + 1}`] ? 'Ja' : 'Nein'}</td>
                             <td class='py-2 px-4 border-b'>${device[`is_private_device_${index + 1}`] ? 'Ja' : 'Nein'}</td>
                             <td class='py-2 px-4 border-b'>
-                                <div class="qr-code" style="width: 60px; height: 60px;" data-qr="${qrData}"></div>
+                                <div class="qr-code" id="qr-code-${device.id}_${index}"></div>
                             </td>
-                            <td class='py-2 px-4 border-b'>${device.barcode}</td>
-                            <td class='py-2 px-4 border-b w-48'>
+                            <td class='py-2 px-4 border-b'>
+                                <svg id="barcode-${device.id}_${index}"></svg>
+                            </td>
+                            <td class='py-2 px-4 border-b'>
                                 <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800 mb-2' onclick="window.location.href='detail_devices.php?id=${device.device_id}'">Ansicht</button>
-                                <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">Bearbeiten</button>
-                                <button class='bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600' onclick="openModal(${device.device_id}, '${device.name}')">Löschen</button>
+                                 <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">Bearbeiten</button>
+                                <button class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600" onclick="openModal('${name}', ${device.id})">Löschen</button>
                             </td>
-                        </tr>`;
+                        </tr>
+                    `;
+
                     deviceList.insertAdjacentHTML('beforeend', row);
+
+                    // Generate QR Code
+                    const qrCode = new QRCode(document.getElementById(`qr-code-${device.id}_${index}`), {
+                        text: qrData,
+                        width: 64,
+                        height: 64,
+                    });
+
+                    // Generate Barcode
+                    JsBarcode(`#barcode-${device.id}_${index}`, serialNumbers[index] || '', {
+                        format: "CODE39",
+                        displayValue: false
+                    });
                 });
             });
-
-            // Generate QR codes after populating the device list
-            generateQRCodes();
         } catch (error) {
             console.error('Error fetching devices:', error);
         }
     }
 
-    function generateQRCodes() {
-        $('.qr-code').each(function() {
-            const qrData = $(this).data('qr'); // Get the QR data from the div's data attribute
-            const qrcode = new QRCode(this, {
-                text: qrData,
-                width: 60,
-                height: 60,
-            });
-        });
+    // Edit device functionality
+    function editDevice(element) {
+        const row = $(element).closest('tr');
+        row.find('.device-name-input, .serial-number-input, .operating-system-input').removeClass('hidden');
+        row.find('.device-name, .serial-number, .operating-system').addClass('hidden');
+        $(element).text('✔️').attr('onclick', 'saveDevice(this, ' + row.data('id') + ')');
     }
 
-    // Fetch devices when the page loads
-    document.addEventListener('DOMContentLoaded', fetchDevices);
+    async function saveDevice(element, deviceId) {
+        const row = $(element).closest('tr');
+        const updatedName = row.find('.device-name-input').val();
+        const updatedSerial = row.find('.serial-number-input').val();
+        const updatedOS = row.find('.operating-system-input').val();
+
+        const confirmed = confirm('Möchten Sie die Änderungen speichern?');
+        if (!confirmed) return; // Stop if user cancels
+
+        try {
+            const response = await fetch(`http://127.0.0.1:3000/api/devices/${deviceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    device_name: updatedName,
+                    serialnumber: updatedSerial,
+                    os: updatedOS,
+                }),
+            });
+
+            if (response.ok) {
+                fetchDevices(); // Refresh the device list
+            } else {
+                console.error('Error saving device:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error saving device:', error);
+        }
+    }
+
+    // Open modal for confirmation
+    function openModal(name, id) {
+        $('#deviceName').text(name);
+        $('#confirmButton').attr('onclick', `confirmDelete(${id})`);
+        $('#deleteModal').removeClass('hidden');
+    }
+
+    // Close modal
+    function closeModal() {
+        $('#deleteModal').addClass('hidden');
+    }
+
+    // Confirm deletion
+    async function confirmDelete(deviceId) {
+        try {
+            const response = await fetch(`http://127.0.0.1:3000/api/devices/${deviceId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                fetchDevices(); // Refresh the device list
+                closeModal(); // Close the modal
+            } else {
+                console.error('Error deleting device:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error deleting device:', error);
+        }
+    }
+
+    // Fetch devices on page load
+    $(document).ready(() => {
+        fetchDevices();
+    });
 </script>
 
 <?php

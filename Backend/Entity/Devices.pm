@@ -19,6 +19,7 @@ sub validate {
     push @errors, "Device_Name_1 ist erforderlich" unless defined $self->{Device_Name_1} && $self->{Device_Name_1} ne '';
     push @errors, "QR_Code ist erforderlich" unless defined $self->{QR_Code} && $self->{QR_Code} ne '';
     push @errors, "Barcode ist erforderlich" unless defined $self->{Barcode} && $self->{Barcode} ne '';
+    push @errors, "Image_Path ist erforderlich" unless defined $self->{image_path} && $self->{image_path} ne '';  # Validation for image_path
 
     # Überprüfe die Seriennummern
     for my $i (1..12) {
@@ -101,6 +102,7 @@ sub to_hash {
         IS_Private_Device_10 => $self->{IS_Private_Device_10},
         IS_Private_Device_11 => $self->{IS_Private_Device_11},
         IS_Private_Device_12 => $self->{IS_Private_Device_12},
+        image_path         => $self->{image_path},  # Added image_path
     };
 }
 

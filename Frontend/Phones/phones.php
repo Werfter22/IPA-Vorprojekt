@@ -8,6 +8,48 @@
     <link rel="stylesheet" href="../CSS/Footer/footer.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Phones List</title>
+    <script>
+        function editPhone(element) {
+            const td = element.closest('td');
+            const span = td.querySelector('.device-name');
+            const input = td.querySelector('.device-name-input');
+
+            // Toggle visibility
+            span.classList.toggle('hidden');
+            input.classList.toggle('hidden');
+
+            // If switching to input mode, focus on it
+            if (!input.classList.contains('hidden')) {
+                input.focus();
+            }
+        }
+
+        function savePhone(element, phoneId) {
+            const td = element.closest('td');
+            const input = td.querySelector('.device-name-input');
+            const newValue = input.value;
+
+            // Make an API call to save the updated value (implement the save functionality as needed)
+            fetch(`http://127.0.0.1:3000/api/phones/${phoneId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ mobile_number_1: newValue }) // Adjust the payload as necessary
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Optionally reload the page or update the UI with the new value
+                    location.reload();
+                } else {
+                    alert('Failed to save changes.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -63,7 +105,12 @@ $phones = fetch_phones_from_api();
                 foreach ($phones as $phone) {
                     echo "<tr class='hover:bg-gray-50'>
                             <td class='py-2 px-2 md:px-4 border-b'>{$phone['phone_id']}</td>
-                            <td class='py-2 px-2 md:px-4 border-b'>{$phone['mobile_number_1']}</td>
+                            <td class='py-2 px-2 md:px-4 border-b'>
+                                <span class='device-name'>{$phone['mobile_number_1']}</span>
+                                <input type='text' class='device-name-input hidden' value='{$phone['mobile_number_1']}' />
+                                <span class='edit-icon cursor-pointer text-blue-500' onclick='editPhone(this)'>✏️</span>
+                                <button class='bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 hidden' onclick='savePhone(this, {$phone['phone_id']})'>Speichern</button>
+                            </td>
                             <td class='py-2 px-2 md:px-4 border-b'>{$phone['mobile_number_2']}</td>
                             <td class='py-2 px-2 md:px-4 border-b'>{$phone['mobile_number_3']}</td>
                             <td class='py-2 px-2 md:px-4 border-b'>{$phone['mobile_number_4']}</td>

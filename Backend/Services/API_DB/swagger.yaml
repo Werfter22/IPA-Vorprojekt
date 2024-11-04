@@ -2,6 +2,22 @@ openapi: "3.0.0"
 info:
   title: "My API"
   version: "1.0"
+components:
+  schemas:
+    DefaultResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    TableRecord:
+      type: object
+      additionalProperties: {}  # Allows any properties
+
 paths:
   /api/{table_name}:
     get:
@@ -20,7 +36,20 @@ paths:
               schema:
                 type: "array"
                 items:
-                  type: "object"
+                  $ref: '#/components/schemas/TableRecord'
+        "400":
+          description: "Invalid table name"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        "500":
+          description: "Database error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+
     post:
       summary: "Add a new record to the specified table"
       parameters:
@@ -30,14 +59,30 @@ paths:
           schema:
             type: "string"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: "object"
+              $ref: '#/components/schemas/TableRecord'
       responses:
         "200":
           description: "Record successfully added"
           content:
             application/json:
               schema:
-                type: "object"
+                $ref: '#/components/schemas/SuccessResponse'
+        "400":
+          description: "Invalid table name or JSON input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        "500":
+          description: "Insert failed"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+
+servers:
+  - url: "http://127.0.0.1:3000/"
