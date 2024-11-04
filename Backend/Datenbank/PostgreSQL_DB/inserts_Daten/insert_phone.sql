@@ -1,0 +1,95 @@
+INSERT INTO Phones (
+    mobile_number_1, mobile_number_2, mobile_number_3, 
+    mobile_number_4, mobile_number_5, mobile_number_6, 
+    mobile_number_7, mobile_number_8, mobile_number_9, 
+    mobile_number_10
+) VALUES
+    ('794588778', '079 282 97 70', '079 104 28 95', 
+     '079 104 28 97', '+41 056 210 91 32', NULL, 
+     NULL, NULL, NULL, NULL),
+     
+    (NULL, NULL, NULL, NULL, NULL, NULL, 
+     NULL, NULL, NULL, NULL),
+
+    (NULL, NULL, NULL, NULL, NULL, NULL, 
+     NULL, NULL, NULL, NULL),
+
+    ('+41 79 229 88 55', '+41 56 210 91 32', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 523 64 90', '41562109132', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 226 81 41', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 376 17 94', '+41 56 210 91 38', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 468 58 47', '+41 56 222 28 89', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 538 84 41', '+41 56 210 91 32', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 728 68 44', '079 679 37 82', '+41 56 210 9132', 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 789 05 55', '+41 56 210 9132', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 901 64 35', '+41 56 210 91 38', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('+41 562109139', '+41 562109138', '+41 562109136', 
+     '+41 562109133', '+41 562109137', '+41 562109134', 
+     '+41 562109131', '+41 562109135', '+41 562109132', 
+     '+41 562109130'),
+
+    ('079 104 28 99', '+41 56 210 9132', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('+41 56 210 91 32', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 454 58 02', '+41 79 454 58 02', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('797890110', '+41 56 210 9132', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('+41 56 210 91 38', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 683 06 33', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('+41 79 299 6123', '+41 56 210 9132', NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 697 47 57', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('+41 56 210 91 38', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 719 56 10', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    (NULL, NULL, NULL, NULL, NULL, NULL, 
+     NULL, NULL, NULL, NULL),
+
+    (NULL, NULL, '41795724964', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL),
+
+    (NULL, NULL, NULL, NULL, NULL, NULL, 
+     NULL, NULL, NULL, NULL),
+
+    ('793776186', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 104 28 99', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+
+    ('079 743 78 66', NULL, NULL, 
+     NULL, NULL, NULL, NULL, NULL, NULL, NULL);

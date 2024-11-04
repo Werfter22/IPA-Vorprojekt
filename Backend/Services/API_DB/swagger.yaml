@@ -1,0 +1,43 @@
+openapi: "3.0.0"
+info:
+  title: "My API"
+  version: "1.0"
+paths:
+  /api/{table_name}:
+    get:
+      summary: "Get all records from a specified table"
+      parameters:
+        - in: "path"
+          name: "table_name"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+    post:
+      summary: "Add a new record to the specified table"
+      parameters:
+        - in: "path"
+          name: "table_name"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+      responses:
+        "200":
+          description: "Record successfully added"
+          content:
+            application/json:
+              schema:
+                type: "object"
