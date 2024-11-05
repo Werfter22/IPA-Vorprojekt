@@ -63,27 +63,29 @@ hook before_dispatch => sub {
     }
 };
 
-# GET endpoint to fetch all records from a table
-get '/api/:table_name' => sub {
+get '/api/:table_name' => {swagger => {operationId => 'getTableRecords'}} => sub {
     my $c = shift;
     my $table_name = $c->stash('table_name');
 
-    # Check if the table exists
+    app->log->debug("Fetching records for table: $table_name");
+
+    # Ensure table exists
     my @all_tables = get_all_tables();
     unless (grep { $_ eq $table_name } @all_tables) {
+        app->log->error("Invalid table name: $table_name");
         return $c->render(json => { error => 'Invalid table name' }, status => 400);
     }
 
-    # Prepare SQL statement
-    my $sth = $dbh->prepare("SELECT * FROM " . $dbh->quote_identifier($table_name));
-    unless ($sth) {
-        return $c->render(json => { error => "Failed to prepare SQL: " . $dbh->errstr }, status => 500);
+    # Prepare SQL
+    my $sth = eval { $dbh->prepare("SELECT * FROM " . $dbh->quote_identifier($table_name)) };
+    if ($@ || !$sth) {
+        app->log->error("Failed to prepare SQL for table $table_name: " . ($dbh->errstr || $@));
+        return $c->render(json => { error => "Failed to prepare SQL" }, status => 500);
     }
 
-    eval {
-        $sth->execute();
-    };
+    eval { $sth->execute() };
     if ($@) {
+        app->log->error("Database execution error on fetching data for table $table_name: $@");
         return $c->render(json => { error => "Database error: $@" }, status => 500);
     }
 
@@ -95,8 +97,9 @@ get '/api/:table_name' => sub {
     $c->render(json => \@data);
 };
 
+
 # POST endpoint to add a new record to a table
-post '/api/:table_name' => {swagger => {operationId => 'postTable'}} => sub {
+post '/api/:table_name' => {swagger => {operationId => 'postTableRecord'}} => sub {
     my $c = shift;
     my $table_name = $c->stash('table_name');
     my $json = $c->req->json;
@@ -117,15 +120,18 @@ post '/api/:table_name' => {swagger => {operationId => 'postTable'}} => sub {
     my $placeholders = join(", ", map { '?' } keys %$json);
     my $sth = eval { $dbh->prepare("INSERT INTO " . $dbh->quote_identifier($table_name) . " ($columns) VALUES ($placeholders)") };
     if ($@) {
-        return $c->render(json => { error => "Insert failed: $@" }, status => 500);
+        app->log->error("Insert preparation failed for table $table_name: $@");
+        return $c->render(json => { error => "Insert preparation failed: $@" }, status => 500);
     }
 
     eval { $sth->execute(values %$json) };
     if ($@) {
-        return $c->render(json => { error => "Database error: $@" }, status => 500);
+        app->log->error("Database execution error on insert for table $table_name: $@");
+        return $c->render(json => { error => "Database execution error: $@" }, status => 500);
     }
 
     $c->render(json => { message => 'Record successfully added' });
 };
+
 
 app->start;

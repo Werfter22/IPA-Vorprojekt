@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<%= url_for('/CSS/Nav/nav.css') %>">
+    <link rel="stylesheet" href="<%= url_for('/CSS/Footer/footer.css') %>"> 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Phone Details</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="max-w-7xl mx-auto bg-white p-8 shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold mb-6">Telefon Nummer Details</h2>
+    <form id="phoneDetailsForm">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            % for my $i (1..10) {
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Tel. Mobile <%= $i %></label>
+                        <input type="text" name="tel_mobile_<%= $i %>" value="<%= stash("tel_mobile_$i") %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    </div>
+                </div>
+            % }
+            % for my $i (1..10) {
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Tel. Arbeit <%= $i %></label>
+                        <input type="text" name="tel_work_<%= $i %>" value="<%= stash("tel_work_$i") %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+            % }
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">QR Code</label>
+                    <input type="text" name="qr_code" value="<%= stash('qr_code') %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Barcode</label>
+                    <input type="text" name="barcode" value="<%= stash('barcode') %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex space-x-4">
+            <a href="<%= url_for('phones_list') %>">
+                <button type="button" class="px-6 py-2 bg-yellow-500 text-white rounded-md shadow hover:bg-yellow-600">Zurück</button>
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function generateQRCode() {
+        alert('Generating QR Code...');
+    }
+
+    function generateBarcode() {
+        alert('Generating Barcode...');
+    }
+</script>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>

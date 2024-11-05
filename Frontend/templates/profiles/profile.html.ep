@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<%= url_for('/CSS/Nav/nav.css') %>">
+    <link rel="stylesheet" href="<%= url_for('/CSS/Footer/footer.css') %>"> 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>User Profiles Overview</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="max-w-7xl mx-auto bg-white p-8 shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-4">Benutzer Profil</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        % for my $user (@$users) {
+            <div class="bg-gray-50 p-4 rounded-lg shadow">
+                <img src="<%= url_for('/Backend/Images/Profile/profile.png') %>" alt="User Image" class="rounded-full w-32 h-32 mx-auto mb-4">
+                <h2 class="text-xl font-semibold"><%= $user->{last_name} %>, <%= $user->{first_name} %></h2>
+                <p class="text-gray-600">Email 1: <%= $user->{email1} %></p>
+                % if ($user->{email2}) {
+                    <p class="text-gray-600">Email 2: <%= $user->{email2} %></p>
+                % }
+                % if ($user->{email3}) {
+                    <p class="text-gray-600">Email 3: <%= $user->{email3} %></p>
+                % }
+                <div class="flex justify-between mt-4">
+                    <a href="<%= url_for('edit_user', user_id => $user->{id}) %>" class="bg-blue-500 text-white py-2 px-4 rounded">Bearbeiten</a>
+                    <a href="<%= url_for('delete_user', user_id => $user->{id}) %>" class="bg-red-500 text-white py-2 px-4 rounded" onclick="return confirm('Möchten Sie diesen Benutzer wirklich löschen?');">Löschen</a>
+                    <a href="<%= url_for('logout_user', user_id => $user->{id}) %>" class="bg-red-500 text-white py-2 px-4 rounded">Abmelden</a>
+                </div>
+            </div>
+        % }
+    </div>
+</div>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>

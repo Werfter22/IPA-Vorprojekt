@@ -2,87 +2,90 @@ openapi: "3.0.0"
 info:
   title: "My API"
   version: "1.0"
-components:
-  schemas:
-    DefaultResponse:
-      type: object
-      properties:
-        error:
-          type: string
-    SuccessResponse:
-      type: object
-      properties:
-        message:
-          type: string
-    TableRecord:
-      type: object
-      additionalProperties: {}  # Allows any properties
-
 paths:
   /api/{table_name}:
     get:
-      summary: "Get all records from a specified table"
+      operationId: getTableRecords
+      summary: "Fetch all records from a specified table"
       parameters:
-        - in: "path"
-          name: "table_name"
+        - in: path
+          name: table_name
           required: true
           schema:
-            type: "string"
+            type: string
       responses:
         "200":
-          description: "Successful response"
+          description: "Records fetched successfully"
           content:
             application/json:
               schema:
-                type: "array"
+                type: array
                 items:
-                  $ref: '#/components/schemas/TableRecord'
+                  type: object
+                  additionalProperties: true
         "400":
           description: "Invalid table name"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DefaultResponse'
+                type: object
+                properties:
+                  error:
+                    type: string
         "500":
           description: "Database error"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DefaultResponse'
+                type: object
+                properties:
+                  error:
+                    type: string
 
     post:
+      operationId: postTableRecord
       summary: "Add a new record to the specified table"
       parameters:
-        - in: "path"
-          name: "table_name"
+        - in: path
+          name: table_name
           required: true
           schema:
-            type: "string"
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TableRecord'
+              type: object
+              additionalProperties: true
       responses:
         "200":
-          description: "Record successfully added"
+          description: "Record added successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                type: object
+                properties:
+                  message:
+                    type: string
         "400":
           description: "Invalid table name or JSON input"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DefaultResponse'
+                type: object
+                properties:
+                  error:
+                    type: string
         "500":
-          description: "Insert failed"
+          description: "Database error"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DefaultResponse'
+                type: object
+                properties:
+                  error:
+                    type: string
 
 servers:
-  - url: "http://127.0.0.1:3000/"
+  - url: "http://127.0.0.1:3000"

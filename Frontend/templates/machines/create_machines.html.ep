@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/Nav/nav.css">
+    <link rel="stylesheet" href="../CSS/Footer/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Create Machine</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="max-w-7xl mx-auto bg-white p-8 shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold mb-6">Maschine erfassen</h2>
+    <form id="createMachineForm" method="POST" action="<%= url_for('create_machine') %>">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Form Fields -->
+            %= field 'is_obsolete', label => 'Ist nicht mehr gebräuchlich?', class => 'block text-sm font-medium text-gray-700'
+            <select name="is_obsolete" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="no" selected>No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            %= field 'machine_name', label => 'Maschinen Name', class => 'block text-sm font-medium text-gray-700', required => 'required'
+            %= field 'machine_function', label => 'Maschinen Funktion', class => 'block text-sm font-medium text-gray-700', required => 'required'
+            %= field 'machine_description', label => 'Maschinen Beschreibung', class => 'block text-sm font-medium text-gray-700', tag => 'textarea', rows => 3, required => 'required'
+
+            %= field 'is_virtual', label => 'Ist Virtuell?', class => 'block text-sm font-medium text-gray-700'
+            <select name="is_virtual" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="no" selected>No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            %= field 'vm_host', label => 'VM Host', class => 'block text-sm font-medium text-gray-700'
+            %= field 'cpu', label => 'CPU', class => 'block text-sm font-medium text-gray-700'
+            %= field 'cores', label => 'Cores', type => 'number', class => 'block text-sm font-medium text-gray-700'
+            %= field 'ram_mb', label => 'RAM (MB)', type => 'number', class => 'block text-sm font-medium text-gray-700'
+            %= field 'os', label => 'Betriebsystem', class => 'block text-sm font-medium text-gray-700'
+            %= field 'os_info', label => 'Betriebsystem Information', class => 'block text-sm font-medium text-gray-700'
+            %= field 'location', label => 'Ort', class => 'block text-sm font-medium text-gray-700'
+            %= field 'lowest_unit', label => 'Kleinste Einheit', class => 'block text-sm font-medium text-gray-700'
+            %= field 'buy_date', label => 'Kauf Datum', type => 'date', class => 'block text-sm font-medium text-gray-700'
+            %= field 'value_of_hardware', label => 'Wert der Hardware', type => 'number', class => 'block text-sm font-medium text-gray-700'
+            %= field 'restore_hours', label => 'Wiederherstellungsdauer', type => 'number', class => 'block text-sm font-medium text-gray-700'
+            %= field 'serial_number', label => 'Seriennummer', class => 'block text-sm font-medium text-gray-700'
+            %= field 'production_date', label => 'Produktionsdatum', type => 'date', class => 'block text-sm font-medium text-gray-700'
+            %= field 'disposal_date', label => 'Entsorgungsdatum', type => 'date', class => 'block text-sm font-medium text-gray-700'
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Erstellen
+            </button>
+            <a href="<%= url_for('machines') %>">
+                <button type="button" class="px-6 py-2 bg-yellow-500 text-white rounded-md shadow hover:bg-yellow-600">Zurück</button>
+            </a>
+        </div>
+    </form>
+</div>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>

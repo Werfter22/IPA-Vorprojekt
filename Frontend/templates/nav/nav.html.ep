@@ -1,0 +1,39 @@
+<nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center">
+          <div class="hidden sm:block">
+            <ul class="flex space-x-4">
+              <li class="nav_home">
+                <%= link_to 'Home', '../Home/home.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+              <li class="nav_users">
+                <%= link_to 'Benutzer', '../Users/users.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+              <li class="nav_devices">
+                <%= link_to 'Geräte', '../Devices/devices.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+              <li class="nav_phones">
+                <%= link_to 'Telefon', '../Phones/phones.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+              <li class="nav_inventory">
+                <%= link_to 'Inventar', '../Inventory/inventory.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+              <li class="nav_machines">
+                <%= link_to 'Maschinen', '../Machines/machines.php', class => 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' %>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="flex items-center">
+          <div class="nav_profile_container bg-white p-5"> 
+            <%= link_to '../Profiles/profiles.php' => class => 'nav_users_profile_image' => begin %>
+              <img class="h-8 w-8 rounded-[20%]" src="../../Backend/Images/Profile/profile.png" alt="Profile Picture">
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
