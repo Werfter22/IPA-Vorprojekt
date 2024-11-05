@@ -34,13 +34,13 @@ function fetch_machines_from_api() {
 $machines = fetch_machines_from_api();
 ?>
 
-<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+<div class="container mx-auto mt-4 p-4 bg-white shadow-md rounded-lg">
     <h1 class="text-3xl font-bold text-center mb-6">Maschinen Liste</h1>
 
     <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mb-4" onclick="window.location.href='create_machines.php'">Hinzufügen</button>
 
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg text-xs">
             <thead class="bg-yellow-400">
                 <tr>
                     <th class="py-2 px-2 md:px-4 border-b text-left text-gray-700">Machine Liste ID</th>

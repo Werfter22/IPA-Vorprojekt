@@ -143,11 +143,13 @@ include '../Nav/nav.php';
                             <td class='py-2 px-4 border-b'>
                                 <svg id="barcode-${device.id}_${index}"></svg>
                             </td>
-                            <td class='py-2 px-4 border-b'>
-                                <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800 mb-2' onclick="window.location.href='detail_devices.php?id=${device.device_id}'">Ansicht</button>
-                                 <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">Bearbeiten</button>
+                           <td class='py-2 px-4 border-b'>
+                            <div class="flex flex-col space-y-2">
+                                <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800' onclick="window.location.href='detail_devices.php?id=${device.device_id}'">Ansicht</button>
+                                <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">Bearbeiten</button>
                                 <button class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600" onclick="openModal('${name}', ${device.id})">Löschen</button>
-                            </td>
+                            </div>
+                        </td>
                         </tr>
                     `;
 
