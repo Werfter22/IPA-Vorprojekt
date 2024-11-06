@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/Nav/nav.css">
+    <link rel="stylesheet" href="../CSS/Footer/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Home Office Bearbeiten</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-6">Home Office Bearbeiten für <%= $user->{firstname} %> <%= $user->{lastname} %></h1>
+
+    <form method="post" action="/save_home_office/<%= $user->{user_id} %>">
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold">Benutzer Informationen</h2>
+            <p>Name: <%= $user->{firstname} %> <%= $user->{lastname} %></p>
+            <p>Email: <%= $user->{email} %></p>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold">Home Office Details</h2>
+
+            <label for="location" class="block text-gray-700">Standort</label>
+            <input type="text" id="location" name="location" value="<%= $home_office->{location} %>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+
+            <label for="description" class="block text-gray-700">Beschreibung</label>
+            <textarea id="description" name="description" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"><%= $home_office->{description} %></textarea>
+        </div>
+
+        <!-- Save and Back Buttons -->
+        <div class="flex gap-4">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Speichern</button>
+            <button type="button" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600" onclick="window.location.href='/home_office'">Zurück</button>
+        </div>
+    </form>
+</div>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>

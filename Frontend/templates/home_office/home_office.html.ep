@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/Nav/nav.css">
+    <link rel="stylesheet" href="../CSS/Footer/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Benutzer und Geräte Liste</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-6">Benutzer und ihre Geräte (Home-Office und Arbeitsplatz)</h1>
+
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 border-b text-left text-gray-700">Name</th>
+                <th class="py-2 px-4 border-b text-left text-gray-700">Email</th>
+                <th class="py-2 px-4 border-b text-left text-gray-700">Anzahl Geräte</th>
+                <th class="py-2 px-4 border-b text-left text-gray-700">Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for my $user (@$users) { %>
+            <tr>
+                <td class="py-2 px-4 border-b"><%= $user->{firstname} %> <%= $user->{lastname} %></td>
+                <td class="py-2 px-4 border-b"><%= $user->{email} %></td>
+                <td class="py-2 px-4 border-b"><%= $user->{device_count} %></td>
+
+                <!-- Action Buttons -->
+                <td class="py-2 px-4 border-b flex flex-wrap gap-2">
+                    <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600" onclick="window.location.href='/view_home_office/<%= $user->{user_id} %>'">Ansicht Home-Office</button>
+                    <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600" onclick="window.location.href='/view_workplace/<%= $user->{user_id} %>'">Ansicht Arbeitsplatz</button>
+                    <button class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600" onclick="window.location.href='/edit_home_office/<%= $user->{user_id} %>'">Bearbeiten Home-Office</button>
+                    <button class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600" onclick="window.location.href='/edit_workplace/<%= $user->{user_id} %>'">Bearbeiten Arbeitsplatz</button>
+                    <button class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600" onclick="window.location.href='/add_home_office/<%= $user->{user_id} %>'">Hinzufügen Home-Office</button>
+                    <button class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600" onclick="window.location.href='/add_workplace/<%= $user->{user_id} %>'">Hinzufügen Arbeitsplatz</button>
+                    <button class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600" onclick="showDeleteModal('<%= $user->{user_id} %>', '<%= $user->{firstname} %> <%= $user->{lastname} %>')">Löschen</button>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for Deletion Confirmation -->
+<div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+        <h2 class="text-xl font-semibold mb-4" id="modalTitle">Benutzer Löschen</h2>
+        <p class="mb-4">Möchten Sie den Benutzer <span id="userName"></span> wirklich löschen?</p>
+        <div class="flex justify-end">
+            <button id="cancelButton" class="bg-gray-300 text-gray-700 py-2 px-4 rounded mr-2" onclick="closeModal()">Abbrechen</button>
+            <button id="confirmButton" class="bg-red-500 text-white py-2 px-4 rounded" onclick="confirmDelete()">Löschen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDeleteModal(userId, userName) {
+        document.getElementById("userName").textContent = userName;
+        document.getElementById("confirmButton").setAttribute("onclick", `confirmDelete(${userId})`);
+        document.getElementById("deleteModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+        document.getElementById("deleteModal").classList.add("hidden");
+    }
+
+    function confirmDelete(userId) {
+        // Perform deletion logic here, e.g., AJAX call to delete user by ID
+        alert("User " + userId + " deleted"); // Placeholder for deletion logic
+        closeModal();
+    }
+</script>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>

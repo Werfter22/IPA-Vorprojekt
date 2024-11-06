@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/Nav/nav.css">
+    <link rel="stylesheet" href="../CSS/Footer/footer.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Gerät Bearbeiten</title>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<%= include '../nav/nav.html.ep' %>
+
+<div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-6">Gerät Bearbeiten: <%= $device->{device_name} %></h1>
+
+    <form method="POST" action="/edit_user_device/<%= $device->{device_id} %>" class="space-y-4">
+        <div>
+            <label for="device_name" class="block text-gray-700">Gerätename:</label>
+            <input type="text" id="device_name" name="device_name" value="<%= $device->{device_name} %>" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+        </div>
+        <div>
+            <label for="image_path" class="block text-gray-700">Bild-URL:</label>
+            <input type="text" id="image_path" name="image_path" value="<%= $device->{image_path} %>" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Änderungen speichern</button>
+            <a href="/user_devices/<%= $device->{user_id} %>" class="bg-gray-300 text-gray-700 py-2 px-4 rounded ml-2">Zurück</a>
+        </div>
+    </form>
+</div>
+
+<%= include '../footer/footer.html.ep' %>
+
+</body>
+</html>
