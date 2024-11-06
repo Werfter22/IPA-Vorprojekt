@@ -1,31 +1,31 @@
-package Controller::Devices;
+package Controller::devices;
 
 use strict;
 use warnings;
-use Mojolicious::Lite;
-use Mojo::UserAgent;  # Für API-Calls zur Datenbank
-use DBI;
+use Mojo::Base 'Mojolicious::Controller';
+use Mojo::UserAgent;
 
-# Route zum Abrufen aller Geräte von der Datenbank-API
-get '/api/devices' => sub {
+# Route to display all devices in the frontend
+get '/devices' => sub {
     my $c = shift;
 
-    # Geräte von der externen Datenbank-API abrufen
+    # Fetch devices from the external API
     my ($devices, $error_msg) = get_all_devices_from_api();
 
-    # Überprüfen, ob Geräte erfolgreich abgerufen wurden
+    # Check if devices were successfully fetched
     if (!$devices) {
-        return $c->render(json => { error => $error_msg || 'Failed to fetch devices' }, status => 500);
+        # Render an error template or pass an error message
+        return $c->render(template => 'devices/error', error_msg => $error_msg || 'Failed to fetch devices');
     }
 
-    # Antwort als JSON rendern
-    $c->render(json => $devices);
+    # Render devices template with the fetched data
+    $c->render(template => 'devices/device', devices => $devices);
 };
 
-# Methode zum Abrufen aller Geräte über die API
+# Method to fetch all devices via the API
 sub get_all_devices_from_api {
     my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/devices";  # URL deiner Datenbank-API
+    my $db_api_url = "http://127.0.0.1:3000/api/devices";  # URL of your database API
 
     my $tx = $ua->get($db_api_url);
     
@@ -36,4 +36,4 @@ sub get_all_devices_from_api {
     }
 }
 
-1;  # Ende des Moduls
+1;

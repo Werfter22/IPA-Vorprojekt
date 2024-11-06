@@ -1,7 +1,6 @@
-package Controller::Machines::create_machines;
+package Controller::Machines::CreateMachines;
 
 use Mojolicious::Lite;
-use Mojo::UserAgent;  # For API calls
 use DBI;
 
 # Database connection
@@ -13,24 +12,23 @@ my $dbh = DBI->connect(
 );
 
 # Function to create a new machine
-post '/machines/create' => sub {
+post '/api/machines/create' => sub {
     my $c = shift;
     my $json = $c->req->json;
 
-    # Validate input
+    # Validate input (add more validations based on your requirements)
     unless ($json && ref($json) eq 'HASH') {
-        return $c->render(template => 'machines/error', error_msg => 'Invalid JSON input');
+        return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
     }
 
     # Prepare SQL and execute
     my $sth = $dbh->prepare("INSERT INTO machines (name, function, description, is_virtual, cpu, cores, ram_mb) VALUES (?, ?, ?, ?, ?, ?, ?)");  # Adjust column names as needed
     eval { $sth->execute($json->{name}, $json->{function}, $json->{description}, $json->{is_virtual}, $json->{cpu}, $json->{cores}, $json->{ram_mb}) };
     if ($@) {
-        return $c->render(template => 'machines/error', error_msg => "Insert failed: $@");
+        return $c->render(json => { error => "Insert failed: $@" }, status => 500);
     }
 
-    # Render success message in a confirmation template
-    $c->render(template => 'machines/create_machines', machine_name => $json->{name});
+    $c->render(json => { message => 'Machine successfully created' });
 };
 
 1;  # End of module

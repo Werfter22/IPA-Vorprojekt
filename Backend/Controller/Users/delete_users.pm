@@ -1,15 +1,7 @@
-package Controller::Users::DeleteUsers;
+package Controller::Users::delete_users;
 
 use Mojolicious::Lite;
-use DBI;
-
-# Database connection
-my $dbh = DBI->connect(
-    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
-    "postgres", 
-    "Findus-7", 
-    { RaiseError => 1, PrintError => 0 }
-);
+use Mojo::UserAgent;  # For API calls to delete the user
 
 # Function to delete a user by ID
 del '/api/users/delete/:id' => sub {
@@ -21,14 +13,18 @@ del '/api/users/delete/:id' => sub {
         return $c->render(json => { error => 'User ID missing' }, status => 400);
     }
 
-    # Execute delete query
-    my $sth = $dbh->prepare("DELETE FROM users WHERE id = ?");
-    eval { $sth->execute($id) };
-    if ($@) {
-        return $c->render(json => { error => "Delete failed: $@" }, status => 500);
-    }
+    # Call the external API to delete the user
+    my $ua = Mojo::UserAgent->new;
+    my $db_api_url = "http://127.0.0.1:3000/api/users/delete/$id";  # URL to your external API
 
-    $c->render(json => { message => "User $id successfully deleted" });
+    my $tx = $ua->delete($db_api_url);
+
+    # Check if the request was successful
+    if ($tx->result->is_success) {
+        $c->render(json => { message => "User $id successfully deleted" });
+    } else {
+        $c->render(json => { error => "Delete failed: " . $tx->result->message }, status => 500);
+    }
 };
 
 1;  # End of module

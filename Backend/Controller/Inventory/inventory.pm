@@ -1,12 +1,12 @@
-package Controller::Inventory;
+package Controller::inventory;
 
 use strict;
 use warnings;
 use Mojolicious::Lite;
-use Mojo::UserAgent;  # For API calls to the database
+use Mojo::UserAgent;
 
-# Route to fetch all inventory items from the database API
-get '/api/inventar_liste_original' => sub {
+# Route to display all inventory items in a frontend template
+get '/inventory' => sub {
     my $c = shift;
 
     # Fetch inventory items from the external database API
@@ -14,11 +14,11 @@ get '/api/inventar_liste_original' => sub {
 
     # Check if items were successfully fetched
     if (!$inventory_items) {
-        return $c->render(json => { error => $error_msg || 'Failed to fetch inventory items' }, status => 500);
+        return $c->render(template => 'inventory/error', error_msg => $error_msg || 'Failed to fetch inventory items');
     }
 
-    # Render response as JSON
-    $c->render(json => $inventory_items);
+    # Render the inventory template with the fetched data
+    $c->render(template => 'inventory/inventory', inventory_items => $inventory_items);
 };
 
 # Method to fetch all inventory items via the API

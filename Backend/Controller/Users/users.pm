@@ -1,13 +1,12 @@
-package Controller::Users;
+package Controller::users;
 
 use strict;
 use warnings;
 use Mojolicious::Lite;
 use Mojo::UserAgent;  # For API calls to the database
-use DBI;
 
-# Route to fetch all users from the database API
-get '/api/users' => sub {
+# Route to fetch all users and render to the template
+get '/users' => sub {
     my $c = shift;
 
     # Fetch users from the external database API
@@ -15,11 +14,11 @@ get '/api/users' => sub {
 
     # Check if users were successfully fetched
     if (!$users) {
-        return $c->render(json => { error => $error_msg || 'Failed to fetch users' }, status => 500);
+        return $c->render(text => $error_msg || 'Failed to fetch users', status => 500);
     }
 
-    # Render response as JSON
-    $c->render(json => $users);
+    # Render the users template with the fetched data
+    $c->render(template => 'users', users => $users);
 };
 
 # Method to fetch all users via the API

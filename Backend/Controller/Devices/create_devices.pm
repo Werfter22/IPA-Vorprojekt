@@ -1,34 +1,47 @@
-package Controller::Devices::CreateDevices;
+package Controller::Devices::create_devices;
 
+use strict;
+use warnings;
 use Mojolicious::Lite;
-use DBI;
+use Mojo::UserAgent;
 
-# Datenbankverbindung
-my $dbh = DBI->connect(
-    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
-    "postgres", 
-    "Findus-7", 
-    { RaiseError => 1, PrintError => 0 }
-);
-
-# Function to create a new device
-post '/api/devices/create' => sub {
+# Route to create a new device
+post '/devices/create' => sub {
     my $c = shift;
     my $json = $c->req->json;
 
-    # Validate input (add more validations based on your requirements)
+    # Validate input (basic check for JSON data)
     unless ($json && ref($json) eq 'HASH') {
         return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
     }
 
-    # Prepare SQL and execute
-    my $sth = $dbh->prepare("INSERT INTO devices (name, type, status) VALUES (?, ?, ?)");
-    eval { $sth->execute($json->{name}, $json->{type}, $json->{status}) };
-    if ($@) {
-        return $c->render(json => { error => "Insert failed: $@" }, status => 500);
+    # Send data to the external API
+    my ($success, $error_msg) = create_device_via_api($json);
+
+    # Check if creation was successful
+    if (!$success) {
+        return $c->render(json => { error => $error_msg || 'Failed to create device' }, status => 500);
     }
 
+    # Respond with success message
     $c->render(json => { message => 'Device successfully created' });
 };
 
-1;  # End of module
+# Function to send the new device data to the external API
+sub create_device_via_api {
+    my $device_data = shift;
+    my $ua = Mojo::UserAgent->new;
+    my $api_url = "http://127.0.0.1:3000/api/devices";  # API endpoint for device creation
+
+    # Make a POST request with device data
+    my $tx = $ua->post($api_url => json => $device_data);
+
+    # Check if the request was successful
+    if ($tx->result->is_success) {
+        return (1, undef);
+    } else {
+        return (0, "API call failed: " . $tx->result->message);
+    }
+}
+
+1;

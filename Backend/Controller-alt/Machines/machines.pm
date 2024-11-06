@@ -1,12 +1,13 @@
-package Controller::machines;
+package Controller::Machines;
 
 use strict;
 use warnings;
 use Mojolicious::Lite;
 use Mojo::UserAgent;  # For API calls to the database
+use DBI;
 
-# Route to fetch and render all machines in a Mojolicious template
-get '/machines' => sub {
+# Route to fetch all machines from the database API
+get '/api/machines' => sub {
     my $c = shift;
 
     # Fetch machines from the external database API
@@ -14,11 +15,11 @@ get '/machines' => sub {
 
     # Check if machines were successfully fetched
     if (!$machines) {
-        return $c->render(template => 'machines/error', error_msg => $error_msg || 'Failed to fetch machines');
+        return $c->render(json => { error => $error_msg || 'Failed to fetch machines' }, status => 500);
     }
 
-    # Render the machines template with the fetched data
-    $c->render(template => 'machines/machines', machines => $machines);
+    # Render response as JSON
+    $c->render(json => $machines);
 };
 
 # Method to fetch all machines via the API

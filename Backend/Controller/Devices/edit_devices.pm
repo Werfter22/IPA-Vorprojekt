@@ -1,42 +1,44 @@
-package Controller::Devices::EditDevices;
+package Controller::Devices::edit_devices;
 
 use Mojolicious::Lite;
-use DBI;
+use Mojo::UserAgent;
 
-# Datenbankverbindung
-my $dbh = DBI->connect(
-    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
-    "postgres", 
-    "Findus-7", 
-    { RaiseError => 1, PrintError => 0 }
-);
-
-# Function to update a device by ID
-put '/api/devices/edit/:id' => sub {
+# Endpoint to display the edit form for a specific device
+get '/devices/edit/:id' => sub {
     my $c = shift;
     my $id = $c->param('id');
-    my $json = $c->req->json;
 
-    # Validate input
-    unless ($id) {
-        return $c->render(json => { error => 'Device ID missing' }, status => 400);
+    # Fetch device details from the external API
+    my $ua = Mojo::UserAgent->new;
+    my $api_url = "http://127.0.0.1:3000/api/devices/$id";  # External API endpoint for device details
+    my $response = $ua->get($api_url)->result;
+
+    # Handle API response
+    if ($response->is_success) {
+        my $device = $response->json;
+        return $c->render(template => 'devices/edit_devices', device => $device);
+    } else {
+        return $c->render(template => 'devices/error', error_msg => 'Failed to fetch device data');
     }
-
-    unless ($json && ref($json) eq 'HASH') {
-        return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
-    }
-
-    # Construct SQL query for updating the device
-    my $sql = "UPDATE devices SET " . join(", ", map { "$_ = ?" } keys %$json) . " WHERE id = ?";
-    my @values = (values %$json, $id);
-
-    my $sth = $dbh->prepare($sql);
-    eval { $sth->execute(@values) };
-    if ($@) {
-        return $c->render(json => { error => "Update failed: $@" }, status => 500);
-    }
-
-    $c->render(json => { message => 'Device successfully updated' });
 };
 
-1;  # End of module
+# Route to handle form submission and send the updated data to the API
+post '/devices/edit/:id' => sub {
+    my $c = shift;
+    my $id = $c->param('id');
+    my $json = $c->req->json;  # Data received from form submission
+
+    # Prepare API request to update device
+    my $ua = Mojo::UserAgent->new;
+    my $api_url = "http://127.0.0.1:3000/api/devices/edit/$id";
+    my $response = $ua->put($api_url => json => $json)->result;
+
+    # Handle response from API
+    if ($response->is_success) {
+        return $c->redirect_to('/devices');  # Redirect to devices list on success
+    } else {
+        return $c->render(template => 'devices/edit', device => $json, error_msg => 'Failed to update device');
+    }
+};
+
+1;

@@ -1,4 +1,4 @@
-package Controller::Machines::DeleteMachines;
+package Controller::Machines::delete_machines;
 
 use Mojolicious::Lite;
 use DBI;
@@ -11,24 +11,25 @@ my $dbh = DBI->connect(
     { RaiseError => 1, PrintError => 0 }
 );
 
-# Function to delete a machine by ID
-del '/api/machines/delete/:id' => sub {
+# Route to delete a machine by ID
+del '/machines/delete/:id' => sub {
     my $c = shift;
     my $id = $c->param('id');
 
-    # Validate that ID is provided
+    # Validate that the ID is provided
     unless ($id) {
-        return $c->render(json => { error => 'Machine ID missing' }, status => 400);
+        return $c->render(template => 'machines/error', error_msg => 'Machine ID is missing');
     }
 
-    # Execute delete query
+    # Execute the delete query
     my $sth = $dbh->prepare("DELETE FROM machines WHERE id = ?");
     eval { $sth->execute($id) };
     if ($@) {
-        return $c->render(json => { error => "Delete failed: $@" }, status => 500);
+        return $c->render(template => 'machines/error', error_msg => "Delete failed: $@");
     }
 
-    $c->render(json => { message => "Machine $id successfully deleted" });
+    # Render success message in a confirmation template
+    $c->render(template => 'machines/delete_machines', machine_id => $id);
 };
 
 1;  # End of module
