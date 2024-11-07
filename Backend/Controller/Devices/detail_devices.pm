@@ -1,69 +1,47 @@
-package Controller::Devices::detail_devices;
+package Controller::Devices::DetailDevices;
 
-use strict;
-use warnings;
 use Mojolicious::Lite;
-use Mojo::UserAgent;
-use lib '../../Entity';  # sicherstellen, dass der Pfad stimmt
-use Devices;
-use Devices_images;
 
-# Route to display device details by ID
-get '/devices/detail/:id' => sub {
+# Function to get details of a specific device
+get '/api/devices/detail/:id' => sub {
     my $c = shift;
     my $id = $c->param('id');
-
-    # Ensure id is provided
+    # Ensure id is being captured correctly
+    warn "Received ID: $id";
+    
+    # Validate that ID is provided
     unless ($id) {
-        return $c->render(template => 'devices/error', error_msg => 'Device ID missing');
+        return $c->render(json => { error => 'Device ID missing' }, status => 400);
     }
 
-    # Fetch device details and image from the API
-    my $device = $c->get_device_details($id);
-    my $device_image = $c->get_device_image($id);
-
-    # Check if device details were fetched successfully
+    # Call the API to get device details
+    my $device = get_device_details($id);
+    
+    # Check if the device was found
     unless ($device) {
-        return $c->render(template => 'devices/error', error_msg => 'Device not found');
+        return $c->render(json => { error => 'Device not found' }, status => 404);
     }
 
-    # Add image path to device data if available, else set a default placeholder
-    $device->{image_path} = $device_image ? $device_image->{image_path} : 'path/to/default_image.jpg';
-
-    # Render the device details in the template
-    $c->render(template => 'devices/detail_devices', device => $device);
+    # Send device data directly as JSON
+    $c->render(json => $device);
 };
 
 # Function to get device details from the database API
 sub get_device_details {
-    my ($c, $id) = @_;
+    my $id = shift;
     my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/devices/$id";  # URL of the external API
+    my $db_api_url = "http://127.0.0.1:3000/api/devices/$id";  # Ensure this is the correct URL
 
     my $tx = $ua->get($db_api_url);
-
-    # Check if the API call was successful
+    
+    # Check if the response is successful
     if ($tx->result->is_success) {
-        return $tx->result->json;
+        my $devices = $tx->result->json;
+
+        # Return the first device if the array is not empty
+        return @$devices ? $devices->[0] : undef;
     } 
-
-    return undef;  # Return undef if the request was unsuccessful
-}
-
-# Function to get device image from the database API
-sub get_device_image {
-    my ($c, $id) = @_;
-    my $ua = Mojo::UserAgent->new;
-    my $image_api_url = "http://127.0.0.1:3000/api/Devices_images/$id";  # URL for the device image API
-
-    my $tx = $ua->get($image_api_url);
-
-    # Check if the API call was successful
-    if ($tx->result->is_success) {
-        return $tx->result->json;
-    } 
-
-    return undef;  # Return undef if the request was unsuccessful
+    return undef;  # Return undef if the request was not successful
 }
 
 1;

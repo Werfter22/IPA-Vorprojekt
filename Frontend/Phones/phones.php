@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://davidshimjs.github.io/qrcodejs/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@latest/dist/JsBarcode.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Phones List</title>
 </head>
 
@@ -86,10 +87,17 @@ $phones = fetch_phones_from_api();
                         <td class='py-1 px-1 border-b'>{$phone['barcode']}</td>
                         
                         <td class='py-1 px-1 border-b'>
-                            <button class='bg-black text-white py-1 px-1 rounded hover:bg-gray-800 text-xs' onclick=\"window.location.href='detail_phones.php?id={$phone['phone_id']}'\">Ansicht</button>
-                            <button class='bg-yellow-500 text-white py-1 px-1 rounded hover:bg-yellow-600 text-xs' onclick=\"window.location.href='edit_phones.php?id={$phone['phone_id']}'\">Bearbeiten</button>
-                            <button class='bg-red-500 text-white py-1 px-1 rounded hover:bg-red-600 text-xs' onclick=\"if(confirm('Möchten Sie dieses Handy wirklich löschen?')) window.location.href='delete_phones.php?id={$phone['phone_id']}';\">Löschen</button>
+                            <button class='bg-black text-white py-1 px-1 rounded hover:bg-gray-800 text-xs' onclick=\"window.location.href='detail_phones.php?id={$phone['phone_id']}'\">
+                                <i class='fas fa-eye' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-yellow-500 text-white py-1 px-1 rounded hover:bg-yellow-600 text-xs' onclick=\"window.location.href='edit_phones.php?id={$phone['phone_id']}'\">
+                                <i class='fas fa-pencil-alt' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-red-500 text-white py-1 px-1 rounded hover:bg-red-600 text-xs' onclick=\"if(confirm('Möchten Sie dieses Handy wirklich löschen?')) window.location.href='delete_phones.php?id={$phone['phone_id']}';\">
+                                <i class='fas fa-trash' style='font-size: 20px;'></i>
+                            </button>
                         </td>
+
                     </tr>";
             }
             ?>

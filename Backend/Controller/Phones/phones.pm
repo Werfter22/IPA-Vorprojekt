@@ -3,36 +3,37 @@ package Controller::Phones;
 use strict;
 use warnings;
 use Mojolicious::Lite;
-use Mojo::UserAgent;  # For API calls to the database
+use Mojo::UserAgent;  # Für API-Anfragen an die Datenbank
+use DBI;
 
-# Route to fetch all phones and render them in the frontend template
-get '/phones' => sub {
+# Route, um alle Telefone von der Datenbank-API abzurufen
+get '/api/phones' => sub {
     my $c = shift;
 
-    # Fetch phones from the external database API
+    # Abrufen der Telefone von der externen Datenbank-API
     my ($phones, $error_msg) = get_all_phones_from_api();
 
-    # Check if phones were successfully fetched
+    # Überprüfen, ob Telefone erfolgreich abgerufen wurden
     if (!$phones) {
-        return $c->render(template => 'phones/error', error_msg => $error_msg || 'Failed to fetch phones');
+        return $c->render(json => { error => $error_msg || 'Failed to fetch phones' }, status => 500);
     }
 
-    # Render the phones in the template
-    $c->render(template => 'phones/phones', phones => $phones);
+    # Antwort als JSON rendern
+    $c->render(json => $phones);
 };
 
-# Method to fetch all phones via the API
+# Methode zum Abrufen aller Telefone über die API
 sub get_all_phones_from_api {
     my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/phones";  # URL of your database API
+    my $db_api_url = "http://127.0.0.1:3000/api/phones";  # URL deiner Datenbank-API
 
     my $tx = $ua->get($db_api_url);
     
     if ($tx->result->is_success) {
-        return ($tx->result->json, undef);  # Return successful response
+        return ($tx->result->json, undef);  # Erfolgreiche Antwort zurückgeben
     } else {
-        return (undef, "API call failed: " . $tx->result->message);  # Return error message
+        return (undef, "API call failed: " . $tx->result->message);  # Fehlernachricht zurückgeben
     }
 }
 
-1;  # End of the module
+1;  # Ende des Moduls

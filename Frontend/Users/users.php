@@ -84,15 +84,24 @@ $users = fetch_users_from_api();
                     <td class='py-1 px-2 border-b'>{$user['barcode']}</td>
                     <td class='py-1 px-2 border-b'>
                         <div class='flex space-x-1'>
-                            <button class='bg-black text-white py-1 px-1 rounded hover:bg-gray-800 text-xs' onclick=\"window.location.href='detail_users.php?id={$user['user_id']}'\">Ansicht</button>
+                            <button class='bg-black text-white py-1 px-1 rounded hover:bg-gray-800 text-xs' onclick=\"window.location.href='detail_users.php?id={$user['user_id']}'\">
+                                <i class='fas fa-eye' style='font-size: 20px;'></i>
+                            </button>
                             <a class='bg-yellow-500 text-white py-1 px-1 rounded hover:bg-yellow-600 text-xs edit-button' onclick='toggleEdit({$user['user_id']})'>
-                                <i class='fas fa-pencil-alt'></i>
+                                <i class='fas fa-pencil-alt' style='font-size: 20px;'></i>
                             </a>
-                             <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick=\"window.location.href='edit_users.php?id={$user['user_id']}'\">Bearbeiten</button>
-                            <button class='bg-green-500 text-white py-1 px-1 rounded hover:bg-green-600 text-xs save-button hidden' onclick='saveChanges({$user['user_id']})'>✔️</button>
-                            <button class='bg-red-500 text-white py-1 px-1 rounded hover:bg-red-600 text-xs' onclick=\"if(confirm('Möchten Sie diesen Benutzer wirklich löschen?')) window.location.href='delete_users.php?id={$user['user_id']}';\">Löschen</button>
+                            <button class='bg-yellow-500 text-white py-1 px-1 rounded hover:bg-yellow-600' onclick=\"window.location.href='edit_users.php?id={$user['user_id']}'\">
+                                <i class='fas fa-edit' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-green-500 text-white py-1 px-1 rounded hover:bg-green-600 text-xs save-button hidden' onclick='saveChanges({$user['user_id']})'>
+                                <i class='fas fa-check' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-red-500 text-white py-1 px-1 rounded hover:bg-red-600 text-xs' onclick=\"if(confirm('Möchten Sie diesen Benutzer wirklich löschen?')) window.location.href='delete_users.php?id={$user['user_id']}';\">
+                                <i class='fas fa-trash' style='font-size: 20px;'></i>
+                            </button>
                         </div>
                     </td>
+
                 </tr>";
         }
     }

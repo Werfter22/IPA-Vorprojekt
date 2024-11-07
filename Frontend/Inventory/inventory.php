@@ -79,13 +79,21 @@ include '../Nav/nav.php';
                             <input type="text" class="device-location-input hidden" value="${item.location}" />
                         </td>
                         <td class='py-2 px-4 border-b'>
-                            <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800 mb-2' onclick="window.location.href='detail_inventory.php?id=${item.inventar_liste_original_id}'">Ansicht</button>
-                            <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="editInventory(${item.inventar_liste_original_id}, this)">
-                                <i class='fas fa-pencil-alt' style='font-size: 30px;'></i>
+                            <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800 mb-2' onclick="window.location.href='detail_inventory.php?id=${item.inventar_liste_original_id}'">
+                                <i class='fas fa-eye' style='font-size: 20px;'></i>
                             </button>
-                            <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="window.location.href='edit_inventory.php?id=${item.inventar_liste_original_id}'">Bearbeiten</button>
-                            <button class='bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600' onclick="openModal(${item.inventar_liste_original_id}, '${item.name}')">Löschen</button>
+                            <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="editInventory(${item.inventar_liste_original_id}, this)">
+                                <i class='fas fa-pencil-alt' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mb-2' onclick="window.location.href='edit_inventory.php?id=${item.inventar_liste_original_id}'">
+                                <i class='fas fa-edit' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600' onclick="openModal(${item.inventar_liste_original_id}, '${item.name}')">
+                                <i class='fas fa-trash' style='font-size: 20px;'></i>
+                            </button>
                         </td>
+
+
                     </tr>`;
                 inventarList.insertAdjacentHTML('beforeend', row);
             });

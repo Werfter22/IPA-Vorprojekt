@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://davidshimjs.github.io/qrcodejs/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@latest/dist/JsBarcode.all.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Geräte Liste</title>
 </head>
 
@@ -143,13 +143,19 @@ include '../Nav/nav.php';
                             <td class='py-2 px-4 border-b'>
                                 <svg id="barcode-${device.id}_${index}"></svg>
                             </td>
-                           <td class='py-2 px-4 border-b'>
-                            <div class="flex flex-col space-y-2">
-                                <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800' onclick="window.location.href='detail_devices.php?id=${device.device_id}'">Ansicht</button>
-                                <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">Bearbeiten</button>
-                                <button class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600" onclick="openModal('${name}', ${device.id})">Löschen</button>
-                            </div>
-                        </td>
+                            <td class='py-2 px-4 border-b'>
+                                <div class="flex flex-col space-y-2">
+                                    <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800' onclick="window.location.href='detail_devices.php?id=${device.device_id}'">
+                                        <i class='fas fa-eye' style='font-size: 20px;'></i>
+                                    </button>
+                                    <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick="window.location.href='edit_devices.php?id=${device.device_id}'">
+                                        <i class='fas fa-pencil-alt' style='font-size: 20px;'></i>
+                                    </button>
+                                    <button class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600" onclick="openModal('${name}', ${device.id})">
+                                        <i class='fas fa-trash' style='font-size: 20px;'></i>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     `;
 

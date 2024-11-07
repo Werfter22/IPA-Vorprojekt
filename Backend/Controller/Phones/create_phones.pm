@@ -1,7 +1,15 @@
-package Controller::Phones::create_phones;
+package Controller::Phones::CreatePhones;
 
 use Mojolicious::Lite;
-use Mojo::UserAgent;  # Import UserAgent for making HTTP requests
+use DBI;
+
+# Database connection
+my $dbh = DBI->connect(
+    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
+    "postgres", 
+    "Findus-7", 
+    { RaiseError => 1, PrintError => 0 }
+);
 
 # Function to create a new phone
 post '/api/phones/create' => sub {
@@ -13,30 +21,14 @@ post '/api/phones/create' => sub {
         return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
     }
 
-    # Call the API to create the phone
-    my $response = create_phone_via_api($json);
-    
-    # Check if the creation was successful
-    unless ($response) {
-        return $c->render(json => { error => 'Failed to create phone' }, status => 500);
+    # Prepare SQL and execute
+    my $sth = $dbh->prepare("INSERT INTO phones (name, type, status, serial_number) VALUES (?, ?, ?, ?)");
+    eval { $sth->execute($json->{name}, $json->{type}, $json->{status}, $json->{serial_number}) };
+    if ($@) {
+        return $c->render(json => { error => "Insert failed: $@" }, status => 500);
     }
 
     $c->render(json => { message => 'Phone successfully created' });
 };
-
-# Function to create a new phone via the database API
-sub create_phone_via_api {
-    my $json = shift;
-    my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/phones";  # Ensure this is the correct URL
-
-    my $tx = $ua->post($db_api_url => json => $json);
-    
-    # Check if the response is successful
-    if ($tx->result->is_success) {
-        return 1;  # Return true if creation was successful
-    }
-    return undef;  # Return undef if the request was not successful
-}
 
 1;  # End of module

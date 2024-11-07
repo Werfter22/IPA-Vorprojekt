@@ -107,14 +107,23 @@ $machines = fetch_machines_from_api();
                         </td>
                         <td class='py-2 px-2 md:px-4 border-b'>
                             <div class='flex space-x-2'>
-                                <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800' onclick=\"window.location.href='detail_machines.php?id={$machine['machine_liste_id']}'\">Ansicht</button>
-                                <a class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 edit-button' onclick='toggleEdit({$machine['machine_liste_id']})'>
-                                    <i class='fas fa-pencil-alt' style='font-size: 30px;'></i>
-                                </a>
-                                <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick=\"window.location.href='edit_machines.php?id={$machine['machine_liste_id']}'\">Bearbeiten</button>
-                                <button class='bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 save-button hidden' onclick='saveChanges({$machine['machine_liste_id']})'>Speichern</button>
-                                <button class='bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600' onclick=\"if(confirm('Möchten Sie diese Maschine wirklich löschen?')) window.location.href='delete_machines.php?id={$machine['machine_liste_id']}';\">Löschen</button>
-                            </div>
+                            <button class='bg-black text-white py-1 px-2 rounded hover:bg-gray-800' onclick=\"window.location.href='detail_machines.php?id={$machine['machine_liste_id']}'\">
+                                <i class='fas fa-eye' style='font-size: 20px;'></i>
+                            </button>
+                            <a class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 edit-button' onclick='toggleEdit({$machine['machine_liste_id']})'>
+                                <i class='fas fa-pencil-alt' style='font-size: 20px;'></i>
+                            </a>
+                            <button class='bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600' onclick=\"window.location.href='edit_machines.php?id={$machine['machine_liste_id']}'\">
+                                <i class='fas fa-edit' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 save-button hidden' onclick='saveChanges({$machine['machine_liste_id']})'>
+                                <i class='fas fa-save' style='font-size: 20px;'></i>
+                            </button>
+                            <button class='bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600' onclick=\"if(confirm('Möchten Sie diese Maschine wirklich löschen?')) window.location.href='delete_machines.php?id={$machine['machine_liste_id']}';\">
+                                <i class='fas fa-trash' style='font-size: 20px;'></i>
+                            </button>
+                        </div>
+
                         </td>
                     </tr>";
             }

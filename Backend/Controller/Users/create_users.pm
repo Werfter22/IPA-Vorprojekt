@@ -1,7 +1,15 @@
-package Controller::Users::create_users;
+package Controller::Users::CreateUsers;
 
 use Mojolicious::Lite;
-use Mojo::UserAgent;  # For API calls to create the user
+use DBI;
+
+# Database connection
+my $dbh = DBI->connect(
+    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
+    "postgres", 
+    "Findus-7", 
+    { RaiseError => 1, PrintError => 0 }
+);
 
 # Function to create a new user
 post '/api/users/create' => sub {
@@ -13,23 +21,14 @@ post '/api/users/create' => sub {
         return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
     }
 
-    # Create a user via the external API
-    my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/users/create";  # URL to your external API
-
-    # Send POST request to the external API
-    my $tx = $ua->post($db_api_url => json => {
-        name => $json->{name},
-        email => $json->{email},
-        role => $json->{role},
-    });
-
-    # Check if the request was successful
-    if ($tx->result->is_success) {
-        $c->render(json => { message => 'User successfully created' });
-    } else {
-        $c->render(json => { error => "Create failed: " . $tx->result->message }, status => 500);
+    # Prepare SQL and execute
+    my $sth = $dbh->prepare("INSERT INTO users (name, email, role) VALUES (?, ?, ?)");
+    eval { $sth->execute($json->{name}, $json->{email}, $json->{role}) };
+    if ($@) {
+        return $c->render(json => { error => "Insert failed: $@" }, status => 500);
     }
+
+    $c->render(json => { message => 'User successfully created' });
 };
 
 1;  # End of module

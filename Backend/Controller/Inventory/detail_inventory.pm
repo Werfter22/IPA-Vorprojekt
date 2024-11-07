@@ -1,42 +1,53 @@
-package Controller::Inventory::detail_inventory;
+package Controller::Inventory::DetailInventory;
 
 use Mojolicious::Lite;
-use Mojo::UserAgent;
+use DBI;
+use Mojo::UserAgent;  # Import UserAgent for making HTTP requests
 
-# Function to get details of a specific inventory item and render it in a template
-get '/inventory/detail/:id' => sub {
+# Database connection
+my $dbh = DBI->connect(
+    "dbi:Pg:dbname=neue_datenbank_angaben_werft;host=localhost;port=5432", 
+    "postgres", 
+    "Findus-7", 
+    { RaiseError => 1, PrintError => 0 }
+);
+
+# Function to get details of a specific inventory item
+get '/api/inventory/detail/:id' => sub {
     my $c = shift;
     my $id = $c->param('id');
 
     # Validate that ID is provided
     unless ($id) {
-        return $c->render(template => 'inventory/error', error_msg => 'Inventory ID missing');
+        return $c->render(json => { error => 'Inventory ID missing' }, status => 400);
     }
 
-    # Fetch item details from the API
-    my ($inventory_item, $error_msg) = get_inventory_item_from_api($id);
+    # Execute SQL query to retrieve inventory item details
+    my $sth = $dbh->prepare("SELECT name, description, quantity FROM inventory WHERE id = ?");  # Adjust columns as needed
+    eval { $sth->execute($id) };
+    if ($@) {
+        return $c->render(json => { error => "Fetch failed: $@" }, status => 500);
+    }
 
-    # Check if the item was found, render the detail view or an error page
+    my $inventory_item = $sth->fetchrow_hashref;
+    
     if ($inventory_item) {
-        $c->render(template => 'inventory/detail_inventory', item => $inventory_item);
+        # Send data to the frontend API
+        my $ua = Mojo::UserAgent->new;
+        my $frontend_api_url = 'http://127.0.0.1:8081/api/inventory';  # Replace with the correct API endpoint
+
+        # Post the inventory item data to the frontend API
+        my $tx = $ua->post($frontend_api_url => json => $inventory_item);
+
+        # Check if the request was successful
+        if ($tx->result->is_success) {
+            $c->render(json => $inventory_item);  # Render the response as JSON
+        } else {
+            $c->render(json => { error => 'Failed to send data to frontend API' }, status => 500);
+        }
     } else {
-        $c->render(template => 'inventory/error', error_msg => $error_msg || 'Inventory item not found');
+        $c->render(json => { error => "Inventory item not found" }, status => 404);
     }
 };
-
-# Helper function to get inventory item details from an external API
-sub get_inventory_item_from_api {
-    my $id = shift;
-    my $ua = Mojo::UserAgent->new;
-    my $db_api_url = "http://127.0.0.1:3000/api/inventory/$id";  # Update with the correct URL
-
-    my $tx = $ua->get($db_api_url);
-    
-    if ($tx->result->is_success) {
-        return ($tx->result->json, undef);
-    } else {
-        return (undef, "API call failed: " . $tx->result->message);
-    }
-}
 
 1;  # End of module

@@ -1,7 +1,6 @@
-package Controller::Machines::edit_machines;
+package Controller::Machines::EditMachines;
 
 use Mojolicious::Lite;
-use Mojo::UserAgent;
 use DBI;
 
 # Database connection
@@ -12,19 +11,19 @@ my $dbh = DBI->connect(
     { RaiseError => 1, PrintError => 0 }
 );
 
-# Route to edit and render the updated machine details
-put '/machines/edit/:id' => sub {
+# Function to update a machine by ID
+put '/api/machines/edit/:id' => sub {
     my $c = shift;
     my $id = $c->param('id');
     my $json = $c->req->json;
 
     # Validate input
     unless ($id) {
-        return $c->render(template => 'machines/error', error_msg => 'Machine ID missing');
+        return $c->render(json => { error => 'Machine ID missing' }, status => 400);
     }
 
     unless ($json && ref($json) eq 'HASH') {
-        return $c->render(template => 'machines/error', error_msg => 'Invalid JSON input');
+        return $c->render(json => { error => 'Invalid JSON input' }, status => 400);
     }
 
     # Construct SQL query for updating the machine
@@ -34,21 +33,10 @@ put '/machines/edit/:id' => sub {
     my $sth = $dbh->prepare($sql);
     eval { $sth->execute(@values) };
     if ($@) {
-        return $c->render(template => 'machines/error', error_msg => "Update failed: $@");
+        return $c->render(json => { error => "Update failed: $@" }, status => 500);
     }
 
-    # Fetch the updated machine data from the API
-    my $ua = Mojo::UserAgent->new;
-    my $api_url = "http://127.0.0.1:3000/api/machines/$id";  # Assuming this API endpoint returns a single machine by ID
-    my $tx = $ua->get($api_url);
-
-    # Check for success and render updated data
-    if ($tx->result->is_success) {
-        my $updated_machine = $tx->result->json;
-        $c->render(template => 'machines/detail_machines', machine => $updated_machine);
-    } else {
-        $c->render(template => 'machines/error', error_msg => 'Failed to fetch updated machine data');
-    }
+    $c->render(json => { message => 'Machine successfully updated' });
 };
 
 1;  # End of module
