@@ -1,152 +1,152 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Import your components for the routes
-import UserList from '../pages/content/users/users.vue'; // Correct path
-import CreateUser from '../pages/content/users/create_users.vue'; // Correct path
-import EditUser from '../pages/content/users/edit_users.vue'; // Correct path
-import DetailUser from '../pages/content/users/detail_users.vue'; // Correct path
+import users from '../pages/content/users/users.vue'; // Correct path
+import create_users from '../pages/content/users/create_users.vue'; // Correct path
+import edit_users from '../pages/content/users/edit_users.vue'; // Correct path
+import detail_users from '../pages/content/users/detail_users.vue'; // Correct path
 
-import DeviceList from '../pages/content/devices/devices.vue'; // Ensure path is correct
-import CreateDevice from '../pages/content/devices/create_devices.vue'; // Ensure path is correct
-import EditDevice from '../pages/content/devices/edit_devices.vue'; // Ensure path is correct
-import DetailDevice from '../pages/content/devices/detail_devices.vue'; // Ensure path is correct
+import devices from '../pages/content/devices/devices.vue'; // Ensure path is correct
+import create_devices from '../pages/content/devices/create_devices.vue'; // Ensure path is correct
+import edit_devices from '../pages/content/devices/edit_devices.vue'; // Ensure path is correct
+import detail_devices from '../pages/content/devices/detail_devices.vue'; // Ensure path is correct
 
-import Inventory from '../pages/content/inventory/inventory.vue'; // Ensure path is correct
-import CreateInventory from '../pages/content/inventory/create_inventory.vue'; // Ensure path is correct
-import EditInventory from '../pages/content/inventory/edit_inventory.vue'; // Ensure path is correct
-import DetailInventory from '../pages/content/inventory/detail_inventory.vue'; // Ensure path is correct
+import inventory from '../pages/content/inventory/inventory.vue'; // Ensure path is correct
+import create_inventory from '../pages/content/inventory/create_inventory.vue'; // Ensure path is correct
+import edit_inventory from '../pages/content/inventory/edit_inventory.vue'; // Ensure path is correct
+import detail_inventory from '../pages/content/inventory/detail_inventory.vue'; // Ensure path is correct
 
-import MachineList from '../pages/content/machines/machines.vue'; // Ensure path is correct
-import CreateMachine from '../pages/content/machines/create_machines.vue'; // Ensure path is correct
-import EditMachine from '../pages/content/machines/edit_machines.vue'; // Ensure path is correct
-import DetailMachine from '../pages/content/machines/detail_machines.vue'; // Ensure path is correct
+import machines from '../pages/content/machines/machines.vue'; // Ensure path is correct
+import create_machines from '../pages/content/machines/create_machines.vue'; // Ensure path is correct
+import edit_machines from '../pages/content/machines/edit_machines.vue'; // Ensure path is correct
+import detail_machines from '../pages/content/machines/detail_machines.vue'; // Ensure path is correct
 
-import PhoneList from '../pages/content/phones/phones.vue'; // Ensure path is correct
-import CreatePhone from '../pages/content/phones/create_phones.vue'; // Ensure path is correct
-import EditPhone from '../pages/content/phones/edit_phones.vue'; // Ensure path is correct
-import DetailPhone from '../pages/content/phones/detail_phones.vue'; // Ensure path is correct
+import phones from '../pages/content/phones/phones.vue'; // Ensure path is correct
+import create_phones from '../pages/content/phones/create_phones.vue'; // Ensure path is correct
+import edit_phones from '../pages/content/phones/edit_phones.vue'; // Ensure path is correct
+import detail_phones from '../pages/content/phones/detail_phones.vue'; // Ensure path is correct
 
-import Home from '../pages/content/home/home.vue'; // Ensure path is correct
+import home from '../pages/content/home/home.vue'; // Ensure path is correct
 
-import Login from '../pages/login/login.vue'; // Ensure path is correct
-import Register from '../pages/login/register.vue'; // Ensure path is correct
+import login from '../pages/login/login.vue'; // Ensure path is correct
+import register from '../pages/login/register.vue'; // Ensure path is correct
 
 // Define your routes
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'home',
+    component: home,
   },
   {
     path: '/users',
-    name: 'UserList',
-    component: UserList,
+    name: 'users',
+    component: users,
   },
   {
     path: '/create_users',
-    name: 'CreateUser',
-    component: CreateUser,
+    name: 'create_users',
+    component: create_users,
   },
   {
     path: '/edit_users/:id',
-    name: 'EditUser',
-    component: EditUser,
+    name: 'edit_users',
+    component: edit_users,
   },
   {
     path: '/detail_users/:id',
-    name: 'DetailUser',
-    component: DetailUser,
+    name: 'detail_users',
+    component: detail_users,
   },
   {
     path: '/devices',
-    name: 'DeviceList',
-    component: DeviceList,
+    name: 'devices',
+    component: devices,
   },
   {
     path: '/create_devices',
-    name: 'CreateDevice',
-    component: CreateDevice,
+    name: 'create_devices',
+    component: create_devices,
   },
   {
     path: '/edit_devices/:id',
-    name: 'EditDevice',
-    component: EditDevice,
+    name: 'edit_devices',
+    component: edit_devices,
   },
   {
     path: '/detail_devices/:id',
-    name: 'DetailDevice',
-    component: DetailDevice,
+    name: 'detail_devices',
+    component: detail_devices,
   },
   {
     path: '/inventory',
-    name: 'Inventory',
-    component: Inventory,
+    name: 'inventory',
+    component: inventory,
   },
   {
     path: '/create_inventory',
-    name: 'CreateInventory',
-    component: CreateInventory,
+    name: 'create_inventory',
+    component: create_inventory,
   },
   {
     path: '/edit_inventory/:id',
-    name: 'EditInventory',
-    component: EditInventory,
+    name: 'edit_inventory',
+    component: edit_inventory,
   },
   {
     path: '/detail_inventory/:id',
-    name: 'DetailInventory',
-    component: DetailInventory,
+    name: 'detail_inventory',
+    component: detail_inventory,
   },
   {
     path: '/machines',
-    name: 'MachineList',
-    component: MachineList,
+    name: 'machines',
+    component: machines,
   },
   {
     path: '/create_machines',
-    name: 'CreateMachine',
-    component: CreateMachine,
+    name: 'create_machines',
+    component: create_machines,
   },
   {
     path: '/edit_machines/:id',
-    name: 'EditMachine',
-    component: EditMachine,
+    name: 'edit_machines',
+    component: edit_machines,
   },
   {
     path: '/detail_machines/:id',
-    name: 'DetailMachine',
-    component: DetailMachine,
+    name: 'detail_machines',
+    component: detail_machines,
   },
   {
     path: '/phones',
-    name: 'PhoneList',
-    component: PhoneList,
+    name: 'phones',
+    component: phones,
   },
   {
     path: '/create_phones',
-    name: 'CreatePhone',
-    component: CreatePhone,
+    name: 'create_phones',
+    component: create_phones,
   },
   {
     path: '/edit_phones/:id',
-    name: 'EditPhone',
-    component: EditPhone,
+    name: 'edit_phones',
+    component: edit_phones,
   },
   {
     path: '/detail_phones/:id',
-    name: 'DetailPhone',
-    component: DetailPhone,
+    name: 'detail_phones',
+    component: detail_phones,
   },
   {
     path: '/login',
-    name: 'Login',
-    component: Login,
+    name: 'login',
+    component: login,
   },
   {
     path: '/register',
-    name: 'Register',
-    component: Register,
+    name: 'register',
+    component: register,
   },
 ];
 
